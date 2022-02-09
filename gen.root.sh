@@ -14,7 +14,7 @@ fi
 openssl req -config ca.cnf \
     -newkey rsa:2048 -nodes -keyout out/root.key.pem \
     -new -x509 -days 7300 -out out/root.crt \
-    -subj "/C=CN/ST=LiaoNing/L=Dalian/O=Yokogawa/CN=Yokogawa ROOT CA"
+    -subj "/C=CN/ST=LiaoNing/L=DaLian/O=Yokogawa/CN=Yokogawa ROOT CA"
 
 # Generate cert key
 openssl genrsa -out "out/cert.key.pem" 2048

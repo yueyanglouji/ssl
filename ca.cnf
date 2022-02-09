@@ -56,8 +56,8 @@ emailAddress                    = Email Address
 
 # Optionally, specify some defaults.
 countryName_default             = CN
-stateOrProvinceName_default     = Liaoning
-localityName_default            = Dalian
+stateOrProvinceName_default     = LiaoNing
+localityName_default            = DaLian
 0.organizationName_default      = Yokogawa
 organizationalUnitName_default  =
 emailAddress_default            =
