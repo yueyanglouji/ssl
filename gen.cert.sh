@@ -5,7 +5,7 @@ then
     echo
     echo 'Issue a wildcard SSL certificate with Fishdrowned ROOT CA'
     echo
-    echo 'Usage: ./gen.cert.sh <domain> [<domain2>] [<domain3>] [<domain4>] ...'
+    echo 'Usage: ./gen.cert.sh <domain> [<domain2>] [<domain3>] [<domain4>] [<IP1>] [<IP2>]...'
     echo '    <domain>          The domain name of your site, like "example.dev",'
     echo '                      you will get a certificate for *.example.dev'
     echo '                      Multiple domains are acceptable'
@@ -15,7 +15,7 @@ fi
 SAN=""
 for var in "$@"
 do
-    if [[ var =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
+    if [[ ${var} =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
         SAN+="IP:${var},"
     else
         SAN+="DNS:*.${var},DNS:${var},"
@@ -43,7 +43,7 @@ openssl req -new -out "${DIR}/$1.csr.pem" \
     -reqexts SAN \
     -config <(cat ca.cnf \
         <(printf "[SAN]\nsubjectAltName=${SAN}")) \
-    -subj "/C=CN/ST=Guangdong/L=Guangzhou/O=Fishdrowned/OU=$1/CN=*.$1"
+    -subj "/C=CN/ST=Liaoning/L=Dalian/O=Yokogawa/OU=$1/CN=*.$1"
 
 # Issue certificate
 # openssl ca -batch -config ./ca.cnf -notext -in "${DIR}/$1.csr.pem" -out "${DIR}/$1.cert.pem"
