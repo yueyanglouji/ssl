@@ -85,18 +85,26 @@ openssl req -new -out "%DIR%/%1.csr.pem" -key %root_path%out/cert.key.pem -reqex
 rem Issue certificate
 openssl ca -config %root_path%ca_copy.cnf -batch -notext -in "%DIR%/%1.csr.pem" -out "%DIR%/%1.crt" -cert %root_path%out/root.crt -keyfile %root_path%out/root.key.pem	
 
+copy %root_path_w%out\cert.key.pem %DIR:/=\%\%1.key.pem
+copy %root_path_w%out\root.crt %DIR:/=\%\root.crt
+echo copy %root_path_w%out\cert.key.pem %DIR:/=\%\%1.key.pem
+pause
+
+rem pkcs12
+openssl pkcs12 -export -password pass:Password -in %DIR%/%1.crt -inkey %DIR%/%1.key.pem -out %DIR%/%1.p12 -name "%1"
+
 del %root_path_w%ca_copy.cnf
 
 rem Chain certificate with CA
 copy %DIR_W%\%1.crt + %root_path_w%out\root.crt %DIR_W%\%1.bundle.crt
 copy %DIR_W%\%1.bundle.crt %BASE_DIR_W%\%1.bundle.crt
 copy %DIR_W%\%1.crt %BASE_DIR_W%\%1.crt
-copy %root_path_w%out\cert.key.pem %BASE_DIR_W%\%1.key.pem
-copy %root_path_w%out\root.crt %BASE_DIR_W%\root.crt
-
+copy %DIR%/%1.key.pem %BASE_DIR_W%\%1.key.pem
+copy %DIR%\root.crt %BASE_DIR_W%\root.crt
 
 rem # Output certificates
 echo Certificates are located in:
 
 echo %BASE_DIR_W%\%1.crt
 echo %BASE_DIR_W%\%1.key.pem
+echo %BASE_DIR_W%\%1.p12

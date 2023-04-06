@@ -43,7 +43,7 @@ openssl req -new -out "${DIR}/$1.csr.pem" \
     -reqexts SAN \
     -config <(cat ca.cnf \
         <(printf "[SAN]\nsubjectAltName=${SAN}")) \
-    -subj "/C=CN/ST=LiaoNing/L=DaLian/O=Yokogawa/OU=$1/CN=*.$1"
+    -subj "/C=CN/ST=LiaoNing/L=DaLian/O=SSLGroup/OU=$1/CN=*.$1"
 
 # Issue certificate
 # openssl ca -batch -config ./ca.cnf -notext -in "${DIR}/$1.csr.pem" -out "${DIR}/$1.cert.pem"
@@ -52,6 +52,12 @@ openssl ca -config ./ca.cnf -batch -notext \
     -out "${DIR}/$1.crt" \
     -cert ./out/root.crt \
     -keyfile ./out/root.key.pem
+	
+ln -snf "../cert.key.pem" "${DIR}/$1.key.pem"
+ln -snf "../root.crt" "${DIR}/root.crt"
+
+# pkcs12
+openssl pkcs12 -export -password pass:Password -in "${DIR}/%1.crt" -inkey "${DIR}/%1.key.pem" -out "${DIR}/%1.p12" -name "%1"
 
 # Chain certificate with CA
 cat "${DIR}/$1.crt" ./out/root.crt > "${DIR}/$1.bundle.crt"
