@@ -9,6 +9,6 @@ _L="DaLian"
 # Organization Name
 _O="SSLGroup"
 # root ca days
-set _ROOT_CA_DAYS=7300
+_ROOT_CA_DAYS=7300
 # ca days
-set _CA_DAYS=730
+_CA_DAYS=730
