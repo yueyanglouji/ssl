@@ -46,6 +46,14 @@ set SAN=!SAN:~0,%count%!
 rem Move to root directory
 cd /d %~dp0
 
+
+call set.env.bat
+echo C: %_C%
+echo ST: %_ST%
+echo L: %_L%
+echo O: %_O%
+echo CA_DAYS: %_CA_DAYS%
+
 rem Generate root certificate if not exists
 if not exist out\root.crt (
 	call gen.root.bat
@@ -80,15 +88,13 @@ echo subjectAltName=%SAN% >>%root_path_w%ca_copy.cnf
 
 echo subjectAltName=%SAN%
 rem Create CSR
-openssl req -new -out "%DIR%/%1.csr.pem" -key %root_path%out/cert.key.pem -reqexts SAN -config %root_path%ca_copy.cnf -subj "/C=CN/ST=LiaoNing/L=DaLian/O=SSLGroup/OU=%1/CN=*.%1"
+openssl req -new -out "%DIR%/%1.csr.pem" -key %root_path%out/cert.key.pem -reqexts SAN -config %root_path%ca_copy.cnf -days %_CA_DAYS% -subj "/C=%_C%/ST=%_ST%/L=%_L%/O=%_O%/OU=%1/CN=*.%1"
 
 rem Issue certificate
-openssl ca -config %root_path%ca_copy.cnf -batch -notext -in "%DIR%/%1.csr.pem" -out "%DIR%/%1.crt" -cert %root_path%out/root.crt -keyfile %root_path%out/root.key.pem	
+openssl ca -config %root_path%ca_copy.cnf -days %_CA_DAYS% -batch -notext -in "%DIR%/%1.csr.pem" -out "%DIR%/%1.crt" -cert %root_path%out/root.crt -keyfile %root_path%out/root.key.pem	
 
 copy %root_path_w%out\cert.key.pem %DIR:/=\%\%1.key.pem
 copy %root_path_w%out\root.crt %DIR:/=\%\root.crt
-echo copy %root_path_w%out\cert.key.pem %DIR:/=\%\%1.key.pem
-pause
 
 rem pkcs12
 openssl pkcs12 -export -password pass:Password -in %DIR%/%1.crt -inkey %DIR%/%1.key.pem -out %DIR%/%1.p12 -name "%1"
@@ -99,8 +105,8 @@ rem Chain certificate with CA
 copy %DIR_W%\%1.crt + %root_path_w%out\root.crt %DIR_W%\%1.bundle.crt
 copy %DIR_W%\%1.bundle.crt %BASE_DIR_W%\%1.bundle.crt
 copy %DIR_W%\%1.crt %BASE_DIR_W%\%1.crt
-copy %DIR%/%1.key.pem %BASE_DIR_W%\%1.key.pem
-copy %DIR%\root.crt %BASE_DIR_W%\root.crt
+copy %DIR_W%\%1.key.pem %BASE_DIR_W%\%1.key.pem
+copy %DIR_W%\root.crt %BASE_DIR_W%\root.crt
 
 rem # Output certificates
 echo Certificates are located in:
@@ -108,3 +114,4 @@ echo Certificates are located in:
 echo %BASE_DIR_W%\%1.crt
 echo %BASE_DIR_W%\%1.key.pem
 echo %BASE_DIR_W%\%1.p12
+echo %BASE_DIR_W%\root.crt

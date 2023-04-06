@@ -26,6 +26,13 @@ SAN=${SAN:0:${#SAN}-1}
 # Move to root directory
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
+bash set.env.sh
+echo C: ${_C}
+echo ST: ${_ST}
+echo L: ${_L}
+echo O: ${_O}
+echo CA_DAYS: ${_CA_DAYS}
+
 # Generate root certificate if not exists
 if [ ! -f "out/root.crt" ]; then
     bash gen.root.sh
@@ -43,11 +50,12 @@ openssl req -new -out "${DIR}/$1.csr.pem" \
     -reqexts SAN \
     -config <(cat ca.cnf \
         <(printf "[SAN]\nsubjectAltName=${SAN}")) \
-    -subj "/C=CN/ST=LiaoNing/L=DaLian/O=SSLGroup/OU=$1/CN=*.$1"
+	-days ${_CA_DAYS} \
+    -subj "/C=${_C}/ST=${_ST}/L=${_L}/O=${_O}/OU=$1/CN=*.$1"
 
 # Issue certificate
 # openssl ca -batch -config ./ca.cnf -notext -in "${DIR}/$1.csr.pem" -out "${DIR}/$1.cert.pem"
-openssl ca -config ./ca.cnf -batch -notext \
+openssl ca -config ./ca.cnf -days ${_CA_DAYS} -batch -notext \
     -in "${DIR}/$1.csr.pem" \
     -out "${DIR}/$1.crt" \
     -cert ./out/root.crt \
