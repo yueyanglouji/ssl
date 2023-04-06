@@ -26,7 +26,7 @@ SAN=${SAN:0:${#SAN}-1}
 # Move to root directory
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
-bash set.env.sh
+. set.env.sh
 echo C: ${_C}
 echo ST: ${_ST}
 echo L: ${_L}

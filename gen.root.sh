@@ -10,7 +10,7 @@ if [ ! -d "out" ]; then
     bash flush.sh
 fi
 
-bash set.env.sh
+. set.env.sh
 echo C: ${_C}
 echo ST: ${_ST}
 echo L: ${_L}
