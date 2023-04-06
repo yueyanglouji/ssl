@@ -80,7 +80,7 @@ echo subjectAltName=%SAN% >>%root_path_w%ca_copy.cnf
 
 echo subjectAltName=%SAN%
 rem Create CSR
-openssl req -new -out "%DIR%/%1.csr.pem" -key %root_path%out/cert.key.pem -reqexts SAN -config %root_path%ca_copy.cnf -subj "/C=CN/ST=LiaoNing/L=DaLian/O=Yokogawa/OU=%1/CN=*.%1"
+openssl req -new -out "%DIR%/%1.csr.pem" -key %root_path%out/cert.key.pem -reqexts SAN -config %root_path%ca_copy.cnf -subj "/C=CN/ST=LiaoNing/L=DaLian/O=SSLGroup/OU=%1/CN=*.%1"
 
 rem Issue certificate
 openssl ca -config %root_path%ca_copy.cnf -batch -notext -in "%DIR%/%1.csr.pem" -out "%DIR%/%1.crt" -cert %root_path%out/root.crt -keyfile %root_path%out/root.key.pem	
