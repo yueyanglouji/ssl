@@ -12,3 +12,5 @@ _O="SSLGroup"
 _ROOT_CA_DAYS=7300
 # ca days
 _CA_DAYS=730
+# jks ca password
+_JKS_PASS="Password"

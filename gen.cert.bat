@@ -53,6 +53,7 @@ echo ST: %_ST%
 echo L: %_L%
 echo O: %_O%
 echo CA_DAYS: %_CA_DAYS%
+echo JKS_PASS: %_JKS_PASS%
 
 rem Generate root certificate if not exists
 if not exist out\root.crt (
@@ -97,7 +98,7 @@ copy %root_path_w%out\cert.key.pem %DIR:/=\%\%1.key.pem
 copy %root_path_w%out\root.crt %DIR:/=\%\root.crt
 
 rem pkcs12
-openssl pkcs12 -export -password pass:Password -in %DIR%/%1.crt -inkey %DIR%/%1.key.pem -out %DIR%/%1.p12 -name "%1"
+openssl pkcs12 -export -password pass:%_JKS_PASS% -in %DIR%/%1.crt -inkey %DIR%/%1.key.pem -out %DIR%/%1.p12 -name "%1"
 
 del %root_path_w%ca_copy.cnf
 

@@ -11,3 +11,5 @@ rem root ca days
 set _ROOT_CA_DAYS=7300
 rem ca days
 set _CA_DAYS=730
+rem jks ca password
+set _JKS_PASS=Password

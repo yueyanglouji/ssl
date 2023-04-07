@@ -32,6 +32,7 @@ echo ST: ${_ST}
 echo L: ${_L}
 echo O: ${_O}
 echo CA_DAYS: ${_CA_DAYS}
+echo JKS_PASS: ${_JKS_PASS}
 
 # Generate root certificate if not exists
 if [ ! -f "out/root.crt" ]; then
@@ -65,7 +66,7 @@ ln -snf "../cert.key.pem" "${DIR}/$1.key.pem"
 ln -snf "../root.crt" "${DIR}/root.crt"
 
 # pkcs12
-openssl pkcs12 -export -password pass:Password -in "${DIR}/$1.crt" -inkey "out/cert.key.pem" -out "${DIR}/$1.p12" -name "$1"
+openssl pkcs12 -export -password pass:${_JKS_PASS} -in "${DIR}/$1.crt" -inkey "out/cert.key.pem" -out "${DIR}/$1.p12" -name "$1"
 
 # Chain certificate with CA
 cat "${DIR}/$1.crt" ./out/root.crt > "${DIR}/$1.bundle.crt"
