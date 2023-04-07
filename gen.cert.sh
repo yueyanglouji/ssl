@@ -67,7 +67,7 @@ ln -snf "../root.crt" "${DIR}/root.crt"
 
 # pkcs12
 openssl pkcs12 -export -password pass:${_JKS_PASS} -in "${DIR}/$1.crt" -inkey "out/cert.key.pem" -out "${DIR}/$1.p12" -name "$1"
-echo ${_JKS_PASS} > "${DIR}\$1.p12.password.txt"
+echo ${_JKS_PASS} > "${DIR}/$1.p12.password.txt"
 
 # Chain certificate with CA
 cat "${DIR}/$1.crt" ./out/root.crt > "${DIR}/$1.bundle.crt"
