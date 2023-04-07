@@ -99,6 +99,7 @@ copy %root_path_w%out\root.crt %DIR:/=\%\root.crt
 
 rem pkcs12
 openssl pkcs12 -export -password pass:%_JKS_PASS% -in %DIR%/%1.crt -inkey %DIR%/%1.key.pem -out %DIR%/%1.p12 -name "%1"
+echo %_JKS_PASS% >%DIR_W%\%1.p12.password.txt
 
 del %root_path_w%ca_copy.cnf
 
@@ -107,6 +108,8 @@ copy %DIR_W%\%1.crt + %root_path_w%out\root.crt %DIR_W%\%1.bundle.crt
 copy %DIR_W%\%1.bundle.crt %BASE_DIR_W%\%1.bundle.crt
 copy %DIR_W%\%1.crt %BASE_DIR_W%\%1.crt
 copy %DIR_W%\%1.key.pem %BASE_DIR_W%\%1.key.pem
+copy %DIR_W%\%1.p12 %BASE_DIR_W%\%1.p12
+copy %DIR_W%\%1.p12.password.txt %BASE_DIR_W%\%1.p12.password.txt
 copy %DIR_W%\root.crt %BASE_DIR_W%\root.crt
 
 rem # Output certificates
@@ -115,4 +118,5 @@ echo Certificates are located in:
 echo %BASE_DIR_W%\%1.crt
 echo %BASE_DIR_W%\%1.key.pem
 echo %BASE_DIR_W%\%1.p12
+echo %BASE_DIR_W%\%1.p12.password.txt
 echo %BASE_DIR_W%\root.crt
