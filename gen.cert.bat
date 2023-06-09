@@ -54,6 +54,16 @@ echo L: %_L%
 echo O: %_O%
 echo CA_DAYS: %_CA_DAYS%
 echo JKS_PASS: %_JKS_PASS%
+echo OPEN_SSL: %_OPENSSL%
+echo     (OPEN_SSL if not set or file not exists, use default openssl which setting in PATH)
+
+if %_OPENSSL%x == x (
+	set _OPENSSL=openssl
+)
+
+if not exist %_OPENSSL% (
+    set _OPENSSL=openssl
+)
 
 rem Generate root certificate if not exists
 if not exist out\root.crt (
@@ -89,16 +99,16 @@ echo subjectAltName=%SAN% >>%root_path_w%ca_copy.cnf
 
 echo subjectAltName=%SAN%
 rem Create CSR
-openssl req -new -out "%DIR%/%1.csr.pem" -key %root_path%out/cert.key.pem -reqexts SAN -config %root_path%ca_copy.cnf -days %_CA_DAYS% -subj "/C=%_C%/ST=%_ST%/L=%_L%/O=%_O%/OU=%1/CN=*.%1"
+%_OPENSSL% req -new -out "%DIR%/%1.csr.pem" -key %root_path%out/cert.key.pem -reqexts SAN -config %root_path%ca_copy.cnf -days %_CA_DAYS% -subj "/C=%_C%/ST=%_ST%/L=%_L%/O=%_O%/OU=%1/CN=*.%1"
 
 rem Issue certificate
-openssl ca -config %root_path%ca_copy.cnf -days %_CA_DAYS% -batch -notext -in "%DIR%/%1.csr.pem" -out "%DIR%/%1.crt" -cert %root_path%out/root.crt -keyfile %root_path%out/root.key.pem	
+%_OPENSSL% ca -config %root_path%ca_copy.cnf -days %_CA_DAYS% -batch -notext -in "%DIR%/%1.csr.pem" -out "%DIR%/%1.crt" -cert %root_path%out/root.crt -keyfile %root_path%out/root.key.pem	
 
 copy %root_path_w%out\cert.key.pem %DIR:/=\%\%1.key.pem
 copy %root_path_w%out\root.crt %DIR:/=\%\root.crt
 
 rem pkcs12
-openssl pkcs12 -export -password pass:%_JKS_PASS% -in %DIR%/%1.crt -inkey %DIR%/%1.key.pem -out %DIR%/%1.p12 -name "%1"
+%_OPENSSL% pkcs12 -export -password pass:%_JKS_PASS% -in %DIR%/%1.crt -inkey %DIR%/%1.key.pem -out %DIR%/%1.p12 -name "%1"
 echo %_JKS_PASS% >%DIR_W%\%1.p12.password.txt
 
 del %root_path_w%ca_copy.cnf
