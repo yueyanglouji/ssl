@@ -20,7 +20,7 @@ subjectAltName=DNS:*.one.dev,DNS:one.dev,DNS:*.two.dev,DNS:two.dev,DNS:*.three.d
 ```
 
 ## 系统要求
-1. Linux，openssl
+1. Linux，openssl （现已支持Windows）
 1. 事先用 `hosts` 或者 `dnsmasq` 解析你本地开发的域名，  
 例如把 `example.dev` 指向 `127.0.0.1`
 
@@ -42,13 +42,13 @@ out/<domain>/<domain>.crt
 out/<domain>/<domain>.bundle.crt
 ```
 
-证书有效期是 2 年，你可以修改 `ca.cnf` 来修改这个年限。
+证书有效期是 2 年，你可以修改 `set.env.sh` 来修改这个年限。
 
 根证书位于：  
 `out/root.crt`  
 成功之后，把根证书导入到操作系统里面，信任这个证书。
 
-根证书的有效期是 20 年，你可以修改 `gen.root.sh` 来修改这个年限。
+根证书的有效期是 20 年，你可以修改 `set.env.sh` 来修改这个年限。
 
 证书私钥位于：  
 `out/cert.key.pem`
@@ -60,21 +60,27 @@ out/<domain>/<domain>.bundle.crt
 你可以运行 `flush.sh` 来清空所有历史，包括根证书和网站证书。
 
 ## 配置
-你可以修改 `ca.cnf` 来修改你的证书年限。
+你可以修改 `set.env.sh` 来修改你的证书年限。
 ```ini
-default_days    = 730
+# Country Name
+_C="CN"
+# State Or Province Name
+_ST="LiaoNing"
+# Locality Name
+_L="DaLian"
+# Organization Name
+_O="SSLGroup"
+# root ca days
+_ROOT_CA_DAYS=7300
+# ca days
+_CA_DAYS=730
+# jks ca password
+_JKS_PASS="Password"
 ```
 
-可以修改 `gen.root.sh` 来自定义你的根证书名称和组织。
+可以修改 `set.env.sh` 来自定义你的证书名称和组织。
 
-也可以修改 `gen.cert.sh` 来自定义你的网站证书组织。
-
-## 参考 / 致谢
-[Vault and self signed SSL certificates](http://dunne.io/vault-and-self-signed-ssl-certificates)
-
-[利用OpenSSL创建自签名的SSL证书备忘](http://wangye.org/blog/archives/732/)
-
-[Provide subjectAltName to openssl directly on command line](http://security.stackexchange.com/questions/74345/provide-subjectaltname-to-openssl-directly-on-command-line)
+(修改前需要删除out文件夹)
 
 ## 关于 Let's Encrypt 客户端
 官方客户端 `certbot` [太复杂了](https://github.com/Neilpang/acme.sh/issues/386)，推荐使用 [acme.sh](https://github.com/Neilpang/acme.sh/wiki/%E8%AF%B4%E6%98%8E)。
