@@ -47,7 +47,7 @@ rem Move to root directory
 cd /d %~dp0
 
 
-call set.env.bat
+call "%~dp0\set.env.bat"
 echo C: %_C%
 echo ST: %_ST%
 echo L: %_L%

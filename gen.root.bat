@@ -13,7 +13,7 @@ if not exist out (
 set root_path=%~dp0
 set root_path=%root_path:\=/%
 
-call set.env.bat
+call "%~dp0\set.env.bat"
 echo C: %_C%
 echo ST: %_ST%
 echo L: %_L%

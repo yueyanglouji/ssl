@@ -5,15 +5,12 @@ echo Removing dir out
 if exist out (
 	rd /s/q out
 )
- 
 
 echo Creating output structure
-mkdir out
-cd out
-mkdir newcerts
-echo=>index.txt
-type nul>index.txt
+mkdir out\newcerts
+echo=>out\index.txt
+type nul>out\index.txt
 
-echo unique_subject=no>index.txt.attr
-echo 1000>serial
+echo unique_subject=no>out\index.txt.attr
+echo 1000>out\serial
 echo Done
